@@ -1,0 +1,537 @@
+<!-- Home page for Surf the Library -->
+<!DOCTYPE html>
+
+<!-- :ets us use Thymeleaf code in this HTML file -->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Surf the Library</title>
+
+  <!-- Bootstrap helps make the page responsive and visually cleaner -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- API for styling -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+
+    body {
+      background: linear-gradient(180deg, #001b3d 0%, #003b73 45%, #001b3d 100%);
+      color: white;
+      min-height: 100vh;
+    }
+
+    .ocean-nav {
+      background-color: rgba(0, 18, 45, 0.95);
+      border-bottom: 1px solid rgba(125, 211, 252, 0.25);
+    }
+
+    .hero-section {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #002855, #005f99, #00a8cc);
+      border-radius: 34px;
+      padding: 38px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    /* This makes the moving wave shape at the bottom of the hero */
+    .hero-section::after {
+      content: "";
+      position: absolute;
+      left: -10%;
+      bottom: -70px;
+      width: 120%;
+      height: 155px;
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 45%;
+      animation: moveWave 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes moveWave {
+      from {
+        transform: translateX(-35px) translateY(5px);
+      }
+      to {
+        transform: translateX(35px) translateY(-8px);
+      }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .simple-label {
+      color: #b8e9ff;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .search-box {
+      border-radius: 999px;
+      padding: 13px 18px;
+      border: none;
+    }
+
+    .search-button {
+      border-radius: 999px;
+      padding-left: 25px;
+      padding-right: 25px;
+      background-color: #7dd3fc;
+      border: none;
+      color: #001b3d;
+      font-weight: 700;
+    }
+
+    .search-button:hover {
+      background-color: #bae6fd;
+      color: #001b3d;
+    }
+
+    .featured-book {
+      background-color: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 28px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+    }
+
+    .featured-cover {
+      height: 230px;
+      object-fit: contain;
+      width: 100%;
+      filter: drop-shadow(0px 12px 24px rgba(0, 0, 0, 0.35));
+    }
+
+    .section-card {
+      display: block;
+      height: 100%;
+      min-height: 210px;
+      text-decoration: none;
+      color: white;
+      border-radius: 30px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(0, 27, 61, 0.22);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .section-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 38px rgba(0, 27, 61, 0.34);
+      color: white;
+    }
+
+    .section-card::after {
+      content: "";
+      position: absolute;
+      right: -35px;
+      bottom: -50px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .top-rated-card {
+      background: linear-gradient(135deg, #005f99, #00a8cc);
+    }
+
+    .budget-card {
+      background: linear-gradient(135deg, #003b73, #0077b6);
+    }
+
+    .all-books-card {
+      background: linear-gradient(135deg, #001b3d, #005f99);
+    }
+
+    .section-title {
+      font-weight: 850;
+      margin-top: 46px;
+      margin-bottom: 8px;
+      color: white;
+    }
+
+    .section-subtitle {
+      color: #d8f3ff;
+      margin-bottom: 18px;
+    }
+
+    .blue-line {
+      height: 3px;
+      width: 90px;
+      background: linear-gradient(90deg, #7dd3fc, white);
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    .book-sections {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+    }
+
+    .book-panel {
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 30px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+    }
+
+    .book-row {
+      display: flex;
+      gap: 22px;
+      overflow-x: auto;
+      padding-bottom: 18px;
+    }
+
+    .book-row::-webkit-scrollbar {
+      height: 10px;
+    }
+
+    .book-row::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+    }
+
+    .book-row::-webkit-scrollbar-thumb {
+      background: #7dd3fc;
+      border-radius: 999px;
+    }
+
+    .book-card {
+      min-width: 235px;
+      background: rgba(255, 255, 255, 0.10);
+      color: white;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 14px 28px rgba(0, 27, 61, 0.20);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .book-card:hover {
+      transform: translateY(-10px) rotate(-1deg);
+      box-shadow: 0 20px 36px rgba(0, 27, 61, 0.32);
+    }
+
+    .book-cover {
+      height: 235px;
+      width: 100%;
+      object-fit: contain;
+      padding: 18px;
+      background: transparent;
+      filter: drop-shadow(0px 10px 18px rgba(0, 0, 0, 0.28));
+    }
+
+    .book-button {
+      background-color: #7dd3fc;
+      color: #001b3d;
+      border-radius: 999px;
+      padding: 8px 15px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: 800;
+      margin-top: 8px;
+    }
+
+    .book-button:hover {
+      background-color: #bae6fd;
+      color: #001b3d;
+    }
+
+    .all-books-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .all-book-card {
+      background: rgba(255, 255, 255, 0.09);
+      color: white;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 24px rgba(0, 27, 61, 0.18);
+    }
+
+    .all-book-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .all-book-card .book-cover {
+      height: 260px;
+      width: 100%;
+      object-fit: contain;
+      padding: 20px;
+      background: transparent;
+    }
+
+    .book-info {
+      padding: 18px;
+      color: white;
+    }
+
+    .book-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .book-meta {
+      margin-bottom: 4px;
+      font-size: 0.95rem;
+      color: #d8f3ff;
+    }
+
+    .book-meta strong {
+      color: white;
+    }
+
+    @media (max-width: 900px) {
+      .book-sections {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-section {
+        padding: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Top bar of the website -->
+<nav class="navbar navbar-expand-lg navbar-dark ocean-nav px-4">
+  <a class="navbar-brand fw-bold" href="/">Surf the Library</a>
+  <span class="navbar-text text-light ms-3">
+    Ride the book waves to your next read.
+  </span>
+</nav>
+
+<!-- Holds all the main page content -->
+<div class="container mt-4 mb-5">
+
+  <!-- Explain the website and shows one book -->
+  <div class="hero-section mb-4">
+    <div class="hero-content">
+      <div class="row align-items-center g-4">
+
+        <div class="col-lg-7">
+          <p class="simple-label">Book Discovery Dashboard</p>
+
+          <h1 class="display-4 fw-bold">Surf the Library</h1>
+
+          <p class="lead mt-3">
+            A book discovery dashboard for with ocean-inspired browsing experience.
+            Find top-rated books, affordable reads, and new books to explore.
+          </p>
+
+          <!-- Search for a book title -->
+          <form action="/search-page" method="get" class="d-flex mt-4">
+            <input class="form-control me-2 search-box" type="text" name="title" placeholder="Search for a book title...">
+            <button class="btn search-button" type="submit">Search</button>
+          </form>
+        </div>
+
+        <!-- Shows the first book in the list as a featured book -->
+        <div class="col-lg-5" th:if="${!books.isEmpty()}">
+          <div class="featured-book">
+            <p class="mb-2 fw-bold">FEATURED BOOK</p>
+
+            <img th:src="${books.get(0).imageUrl}" class="featured-cover mb-3">
+
+            <h5 class="fw-bold" th:text="${books.get(0).title}"></h5>
+
+            <p class="mb-1">
+              <strong>Genre:</strong>
+              <span th:text="${books.get(0).category}"></span>
+            </p>
+
+            <p class="mb-1">
+              <strong>Rating:</strong>
+              <span th:text="${books.get(0).rating}"></span>/5
+            </p>
+
+            <p class="mb-3">
+              <strong>Price:</strong>
+              £<span th:text="${books.get(0).price}"></span>
+            </p>
+
+            <a th:href="@{/book/{upc}(upc=${books.get(0).upc})}" class="btn btn-light rounded-pill">
+              View Book
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Big cards that help users pick what they want to browse -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-4">
+      <a href="/top-rated-page" class="section-card top-rated-card">
+        <span class="small-label">Top Rated</span>
+        <h2 class="fw-bold">Highest Rated</h2>
+        <p>Books with strong ratings from the scraped catalog.</p>
+      </a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="/budget-page" class="section-card budget-card">
+        <span class="small-label">Under £20</span>
+        <h2 class="fw-bold">Budget Picks</h2>
+        <p>Books that cost less than £20.</p>
+      </a>
+    </div>
+
+    <div class="col-md-4">
+      <a href="/" class="section-card all-books-card">
+        <span class="small-label">All Books</span>
+        <h2 class="fw-bold">Full Library</h2>
+        <p>Explore every book saved in the database.</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- This area shows two special book sections next to each other -->
+  <div class="book-sections">
+
+    <!-- only show books with ratings of 4 or 5 -->
+    <div class="book-panel">
+      <h3 class="section-title mt-0">Highest Rated Books</h3>
+      <div class="blue-line"></div>
+      <p class="section-subtitle">Books with a rating of 4 or higher.</p>
+
+      <div class="book-row">
+        <div class="card book-card" th:each="book : ${books}" th:if="${book.rating >= 4}">
+          <img th:src="${book.imageUrl}" class="card-img-top book-cover">
+
+          <div class="card-body">
+            <h6 class="card-title fw-bold" th:text="${book.title}"></h6>
+
+            <p class="book-meta">
+              <strong>Genre:</strong>
+              <span th:text="${book.category}"></span>
+            </p>
+
+            <p class="book-meta">
+              <strong>Price:</strong>
+              £<span th:text="${book.price}"></span>
+            </p>
+
+            <p class="book-meta">
+              <strong>Rating:</strong>
+              <span th:text="${book.rating}"></span>/5
+            </p>
+
+            <a th:href="@{/book/{upc}(upc=${book.upc})}" class="book-button">
+              View Book
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Only shows books that cost less than 20 pounds -->
+    <div class="book-panel">
+      <h3 class="section-title mt-0">Budget Picks</h3>
+      <div class="blue-line"></div>
+      <p class="section-subtitle">Books that cost less than £20.</p>
+
+      <div class="book-row">
+        <div class="card book-card" th:each="book : ${books}" th:if="${book.price < 20}">
+          <img th:src="${book.imageUrl}" class="card-img-top book-cover">
+
+          <div class="card-body">
+            <h6 class="card-title fw-bold" th:text="${book.title}"></h6>
+
+            <p class="book-meta">
+              <strong>Genre:</strong>
+              <span th:text="${book.category}"></span>
+            </p>
+
+            <p class="book-meta">
+              <strong>Price:</strong>
+              £<span th:text="${book.price}"></span>
+            </p>
+
+            <p class="book-meta">
+              <strong>Rating:</strong>
+              <span th:text="${book.rating}"></span>/5
+            </p>
+
+            <a th:href="@{/book/{upc}(upc=${book.upc})}" class="book-button">
+              View Book
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- This section shows every book from the database -->
+  <h3 class="section-title">All Books</h3>
+  <div class="blue-line"></div>
+  <p class="section-subtitle">
+    Every scraped book displayed in a more visual layout than the original catalog.
+  </p>
+
+  <div class="all-books-layout">
+    <div class="all-book-card" th:each="book : ${books}">
+      <img th:src="${book.imageUrl}" class="card-img-top book-cover">
+
+      <div class="book-info">
+        <h6 class="book-title" th:text="${book.title}"></h6>
+
+        <p class="book-meta">
+          <strong>Genre:</strong>
+          <span th:text="${book.category}"></span>
+        </p>
+
+        <p class="book-meta">
+          <strong>Price:</strong>
+          £<span th:text="${book.price}"></span>
+        </p>
+
+        <p class="book-meta">
+          <strong>Rating:</strong>
+          <span th:text="${book.rating}"></span>/5
+        </p>
+
+        <a th:href="@{/book/{upc}(upc=${book.upc})}" class="book-button">
+          View Book
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
