@@ -21,7 +21,7 @@ public class Scraper {
     // Starts the scraper and goes through all 50 pages of the book website.
     public void scrapeBooks() {
         try {
-            for (int page = 1; page <= 50; page++) {
+            for (int page = 1; page <= 10; page++) {
                 System.out.println("Scraping page " + page);
 
                 String pageUrl = "https://books.toscrape.com/catalogue/page-" + page + ".html";
